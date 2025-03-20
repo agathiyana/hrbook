@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        .header-container h2 {
+            margin: 0;
+            padding-left: 10px;
+        }
+        .header-container button {
+            background-color: white;
+            color: #007bff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .header-container button:hover {
+            background-color: #e0e0e0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 700px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        .modal-content {
+            padding: 20px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 {
+            margin: 0;
+        }
+        .close {
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .form-container {
+            display: flex;
+            gap: 15px;
+        }
+        .form-column {
+            flex: 1;
+        }
+        .form-column label {
+            display: block;
+            margin-top: 10px;
+        }
+        .form-column input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .modal-content button {
+            margin-top: 15px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <h2>Candidate Management</h2>
+        <button onclick="openCandidateModal()">Add Candidate</button>
+        <button onclick="openCandidateModal()">Manage Requirement</button>
+
+    </div>
+
+    <!-- Candidate Modal -->
+    <div id="candidateModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Candidate</h3>
+                <span class="close" onclick="closeModal('candidateModal')">&times;</span>
+            </div>
+            
+            <input type="hidden" id="editIndex">
+            
+            <div class="form-container">
+                <div class="form-column">
+                    <label>Candidate Name:</label>
+                    <input type="text" id="candidateName">
+                    <label>Requirement Name:</label>
+                    <input type="text" id="requirementName">
+                    <label>Email ID:</label>
+                    <input type="text" id="profileReview">
+                    <label>Phone #:</label>
+                    <input type="text" id="l1Status">
+                    <!-- <label>L2 Status:</label>
+                    <input type="text" id="l2Status"> -->
+                </div>
+
+                <!-- <div class="form-column">
+                    <label>HR Status:</label>
+                    <input type="text" id="hrStatus">
+                    <label>Client Status:</label>
+                    <input type="text" id="clientStatus">
+                    <label>Offer Status:</label>
+                    <input type="text" id="offerStatus">
+                    <label>Onboarding:</label>
+                    <input type="text" id="onboarding">
+                    <label>Overall Status:</label>
+                    <input type="text" id="overallStatus">
+                </div> -->
+            </div>
+
+            <button onclick="saveCandidate()">Save Candidate</button>
+        </div>
+    </div>
+
+    <!-- Candidate Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Candidate Name</th>
+                <th>Requirement Name</th>
+                <th>Profile Review</th>
+                <th>L1 Status</th>
+                <th>L2 Status</th>
+                <th>HR Status</th>
+                <th>Client Status</th>
+                <th>Offer Status</th>
+                <th>Onboarding</th>
+                <th>Overall Status</th>
+                <!-- <th>Actions</th> -->
+            </tr>
+        </thead>
+        <tbody id="candidateTableBody"></tbody>
+    </table>
+
+    <script>
+        function openCandidateModal(index = null) {
+            document.getElementById("candidateModal").style.display = "block";
+
+            if (index !== null) {
+                document.getElementById("modalTitle").innerText = "Edit Candidate";
+                let row = document.getElementById("candidateTableBody").rows[index];
+                document.getElementById("editIndex").value = index;
+                document.getElementById("candidateName").value = row.cells[0].innerText;
+                document.getElementById("requirementName").value = row.cells[1].innerText;
+                document.getElementById("profileReview").value = row.cells[2].innerText;
+                document.getElementById("l1Status").value = row.cells[3].innerText;
+                document.getElementById("l2Status").value = row.cells[4].innerText;
+                document.getElementById("hrStatus").value = row.cells[5].innerText;
+                document.getElementById("clientStatus").value = row.cells[6].innerText;
+                document.getElementById("offerStatus").value = row.cells[7].innerText;
+                document.getElementById("onboarding").value = row.cells[8].innerText;
+                document.getElementById("overallStatus").value = row.cells[9].innerText;
+            } else {
+                document.getElementById("modalTitle").innerText = "Add Candidate";
+                document.getElementById("editIndex").value = "";
+                document.querySelectorAll(".modal-content input").forEach(el => el.value = "");
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        function saveCandidate() {
+            let index = document.getElementById("editIndex").value;
+            let tableBody = document.getElementById("candidateTableBody");
+
+            
+            let newRow = tableBody.insertRow();
+            let name = document.getElementById("candidateName").value;
+            let req = document.getElementById("requirementName").value;
+            let email = document.getElementById("profileReview").value;
+            let phone = document.getElementById("l1Status").value;
+
+            newRow.innerHTML = `<td>${name}</td>
+                                <td>${req}</td>
+                                <td>${email}</td>
+                                <td>${phone}</td>
+                                <td>Pending</td>
+                                <td>Pending</td>
+                                <td>Pending</td>
+                                <td>Pending</td>
+                                <td>Pending</td>
+                                <td>
+                                    <span id="statusText">Pending</span>
+                                    <button onclick="openOverallStatusModal(this)">Edit</button>
+                                </td>`;
+            closeModal("candidateModal");
+        }
+    </script>
+
+</body>
+</html>
