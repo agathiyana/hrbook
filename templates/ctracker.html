@@ -112,7 +112,7 @@
 
     <div class="header-container">
         <h2>Candidate Management</h2>
-        <button onclick="openCandidateModal()">Add Candidate</button>
+        <button onclick="AddCandidateModal()">Add Candidate</button>
         <button onclick="openCandidateModal()">Manage Requirement</button>
 
     </div>
@@ -132,7 +132,12 @@
                     <label>Candidate Name:</label>
                     <input type="text" id="candidateName">
                     <label>Requirement Name:</label>
-                    <input type="text" id="requirementName">
+                    <!-- <input type="text" id="requirementName"> -->
+                    <select id="requirementName">
+                        {% for req in req_list %}
+                            <option value="{{ req }}">{{ req }}</option>
+                        {% endfor %}
+                    </select>
                     <label>Email ID:</label>
                     <input type="text" id="profileReview">
                     <label>Phone #:</label>
@@ -180,7 +185,7 @@
     </table>
 
     <script>
-        function openCandidateModal(index = null) {
+        function AddCandidateModal(index = null) {
             document.getElementById("candidateModal").style.display = "block";
 
             if (index !== null) {
@@ -221,15 +226,17 @@
 
             newRow.innerHTML = `<td>${name}</td>
                                 <td>${req}</td>
-                                <td>${email}</td>
-                                <td>${phone}</td>
+                                <td style="display:none">${email}</td>
+                                <td style="display:none">${phone}</td>
                                 <td>Pending</td>
-                                <td>Pending</td>
-                                <td>Pending</td>
-                                <td>Pending</td>
-                                <td>Pending</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <td>
-                                    <span id="statusText">Pending</span>
+                                    <span id="statusText">Review</span>
                                     <button onclick="openOverallStatusModal(this)">Edit</button>
                                 </td>`;
             closeModal("candidateModal");
