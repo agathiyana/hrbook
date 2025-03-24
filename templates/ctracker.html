@@ -113,7 +113,9 @@
     <div class="header-container">
         <h2>Candidate Management</h2>
         <button onclick="AddCandidateModal()">Add Candidate</button>
-        <button onclick="openCandidateModal()">Manage Requirement</button>
+        <form action="{{ url_for('managerreq') }}" method="GET">
+            <button type="submit">Manage Requirement</button>
+        </form>
 
     </div>
 

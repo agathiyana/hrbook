@@ -3,99 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Requirements Management</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f8f9fa;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        .btn-container {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin: 5px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 50%;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-        }
-        .modal-content label {
-            display: block;
-            margin-top: 10px;
-        }
-        .modal-content input, select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .modal-content button {
-            margin-top: 15px;
-            width: 100%;
-        }
-        .close {
-            float: right;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
 
-    <h2>Requirements Management</h2>
-    
-    <div class="btn-container">
-        <button onclick="openRequirementModal()">Add Requirement</button>
+    <div class="header-container">
+        <h2>Candidate Management</h2>
+
+        <button onclick="AddRequirementModal()">Add Requirement</button>
+        <form action="{{ url_for('ctracker') }}" method="GET">
+            <button type="submit">Candidate Management</button>
+        </form>
     </div>
 
     <!-- Requirement Modal -->
@@ -103,107 +22,277 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h3 id="modalTitle">Add Requirement</h3>
-            <input type="hidden" id="editIndex">
-            <label>Requirement Name:</label>
-            <input type="text" id="reqName">
-            <label>Client Name:</label>
-            <input type="text" id="clientName">
-            <label>Technical Details:</label>
-            <input type="text" id="techDetails">
-            <label>Start Date:</label>
-            <input type="date" id="startDate">
-            <label>End Date:</label>
-            <input type="date" id="endDate">
-            <label>Account Manager:</label>
-            <input type="text" id="accountManager">
-            <label>Display?</label>
-            <select id="displayStatus">
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-            </select>
-            <label>Status:</label>
-            <select id="reqStatus">
-                <option value="Open">Open</option>
-                <option value="Closed">Closed</option>
-                <option value="On Hold">On Hold</option>
-            </select>
-            <button onclick="saveRequirement()">Save Requirement</button>
+                <form action="/managerequirement" method="POST">
+
+                    <div class="form-group">
+                        <label for="requirementname">Requirement Name</label>
+                        <input type="text" id="requirementname" name="requirementname" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="clientname">Client Name</label>
+                        <input type="text" id="clientname" name="clientname" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="clientmanager">Client Manager</label>
+                        <input type="text" id="clientmanager" name="clientmanager" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="departmentname">Department Name</label>
+                        <input type="text" id="departmentname" name="departmentname" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="accountmanager">Account Manager</label>
+                        <input type="text" id="accountmanager" name="accountmanager" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="jobdescription">Job Description</label>
+                        <input type="text" id="jobdescription" name="jobdescription" required></textarea>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="workexperience">Work Experience</label>
+                        <input type="text" id="workexperience" name="workexperience" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="openposition">Open Position</label>
+                        <input type="number" id="openposition" name="openposition" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="startdate">Start Date</label>
+                        <input type="date" id="startdate" name="startdate" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="enddate">End Date</label>
+                        <input type="date" id="enddate" name="enddate" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="display">Display</label>
+                        <select id="display" name="display" required>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" name="status" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+        
+                    <div class="form-group">
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
         </div>
     </div>
 
-    <!-- Requirements Table -->
+    {% if request.args.get('alert') %}
+        <div id ="alert" class="alert alert-success">
+            {{ request.args.get('alert')}}
+        </div>
+    {% endif %}
     <table>
         <thead>
             <tr>
+                <th>Requirement id</th>
                 <th>Requirement Name</th>
                 <th>Client Name</th>
-                <th>Technical Details</th>
-                <th>Start Date</th>
-                <th>End Date</th>
+                <th>Client Manager</th>
+                <th>Department Name</th>
                 <th>Account Manager</th>
-                <th>Display?</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>Job Description</th>
+                <th>Total Work Experience</th>
+                <th>Total Open Position</th>
+				<th>Start Date</th>
+				<th>End Date</th>
+				<th>Display?</th>
+				<th>Status</th>
+				<th>Actions</th>
             </tr>
         </thead>
-        <tbody id="requirementTableBody"></tbody>
+        <tbody>
+            {% for requirement in requirements %}
+            <tr>
+                <td id="reqid">{{ requirement['id'] }}</td>
+                <td>{{ requirement['requirementname'] }}</td>
+                <td>{{ requirement['clientname'] }}</td>
+                <td>{{ requirement['clientmanager'] }}</td>
+                <td>{{ requirement['departmentname'] }}</td>
+                <td>{{ requirement['accountmanager'] }}</td>
+                <td>{{ requirement['jobdescription'] }}</td>
+                <td>{{ requirement['workexperience'] }}</td>
+                <td>{{ requirement['openposition'] }}</td>
+                <td>{{ requirement['startdate'] }}</td>
+                <td>{{ requirement['enddate'] }}</td>
+                <td>{{ requirement['display'] }}</td>
+                <td>{{ requirement['status'] }}</td>
+                <td>
+                    <!-- Delete Form -->
+                    <button type="submit" action="{{ url_for('edit', record_id=requirement.id) }}" method="POST" id="edit" data-bs-target="#editrequirementModal" onclick="editrequirementModal('{{requirement.id}}')">Edit</button>
+
+                    <form action="{{ url_for('delete', record_id=requirement.id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button> 
+                        
+
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="12">No data available. Kindly add new requirement</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+    
+    <div id="editrequirementModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="editcloseModal()">&times;</span>
+            <h3 id="modalTitle">Edit Requirement</h3>
+                <form action="/edit" method="POST">
 
+                    <div class="form-group">
+                        <label for="id">Requirement Id</label>
+                        <input type="text" id="requirementid" name="requirementid" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="requirementname">Requirement Name</label>
+                        <input type="text" id="requirementname_edit" name="requirementname"  required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="clientname">Client Name</label>
+                        <input type="text" id="clientname_edit" name="clientname"  required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="clientmanager">Client Manager</label>
+                        <input type="text" id="clientmanager_edit" name="clientmanager" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="departmentname">Department Name</label>
+                        <input type="text" id="departmentname_edit" name="departmentname" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="accountmanager">Account Manager</label>
+                        <input type="text" id="accountmanager_edit" name="accountmanager" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="jobdescription">Job Description</label>
+                        <input type="text" id="jobdescription_edit" name="jobdescription" required></textarea>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="workexperience">Work Experience</label>
+                        <input type="text" id="workexperience_edit" name="workexperience" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="openposition">Open Position</label>
+                        <input type="number" id="openposition_edit" name="openposition" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="startdate">Start Date</label>
+                        <input type="date" id="startdate_edit" name="startdate" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="enddate">End Date</label>
+                        <input type="date" id="enddate_edit" name="enddate" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="display">Display</label>
+                        <select id="display_edit" name="display" required>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status_edit" name="status" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+        
+                    <div class="form-group">
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
-        function openRequirementModal(index = null) {
-            document.getElementById("requirementModal").style.display = "block";
+         setTimeout(function(){
+        document.getElementById('alert').style.display = 'none';
+    }, 5000);
+        function disablealert(){
 
-            if (index !== null) {
-                document.getElementById("modalTitle").innerText = "Edit Requirement";
-                let row = document.getElementById("requirementTableBody").rows[index];
-                document.getElementById("editIndex").value = index;
-                document.getElementById("reqName").value = row.cells[0].innerText;
-                document.getElementById("clientName").value = row.cells[1].innerText;
-                document.getElementById("techDetails").value = row.cells[2].innerText;
-                document.getElementById("startDate").value = row.cells[3].innerText;
-                document.getElementById("endDate").value = row.cells[4].innerText;
-                document.getElementById("accountManager").value = row.cells[5].innerText;
-                document.getElementById("displayStatus").value = row.cells[6].innerText;
-                document.getElementById("reqStatus").value = row.cells[7].innerText;
-            } else {
-                document.getElementById("modalTitle").innerText = "Add Requirement";
-                document.getElementById("editIndex").value = "";
-                document.querySelectorAll(".modal-content input, .modal-content select").forEach(el => el.value = "");
-            }
+          var alert = document.getElementById('alertMessage');
+          alert.style.display = 'none';
         }
+        function AddRequirementModal() {
+            document.getElementById("requirementModal").style.display = "block";
+            
+        }
+        function editrequirementModal(id) {
+            document.getElementById("editrequirementModal").style.display = "block";
+        }
+        
+        $('#edit').on('click', function() {
+            var reqid = $('#reqid').text();
+            $.ajax({
+                url: '/getreq/'+ reqid,
+                type: 'GET',
+                success: function(response) {
+                    // Populate the modal with user data
+                    $('#requirementid').val(response.id);
+                    $('#requirementname_edit').val(response.requirementname);
+                    $('#clientname_edit').val(response.clientname);
+                    $('#clientmanager_edit').val(response.clientmanager);
+                    $('#departmentname_edit').val(response.departmentname);
+                    $('#accountmanager_edit').val(response.accountmanager);
+                    $('#jobdescription_edit').val(response.jobdescription);
+                    $('#workexperience_edit').val(response.workexperience);
+                    $('#openposition_edit').val(response.openposition);
+                    $('#startdate_edit').val(response.startdate);
+                    $('#enddate_edit').val(response.enddate);
+                    $('#display_edit').val(response.display);
+                    $('#status_edit').val(response.status);
+                }
+            });
+        });
 
         function closeModal() {
             document.getElementById("requirementModal").style.display = "none";
+            alert = request.args.get('alert', None)
         }
 
-        function saveRequirement() {
-            let index = document.getElementById("editIndex").value;
-            let tableBody = document.getElementById("requirementTableBody");
-
-            let data = [
-                document.getElementById("reqName").value,
-                document.getElementById("clientName").value,
-                document.getElementById("techDetails").value,
-                document.getElementById("startDate").value,
-                document.getElementById("endDate").value,
-                document.getElementById("accountManager").value,
-                document.getElementById("displayStatus").value,
-                document.getElementById("reqStatus").value
-            ];
-
-            if (index) {
-                let row = tableBody.rows[index];
-                data.forEach((val, i) => row.cells[i].innerText = val);
-            } else {
-                let newRow = tableBody.insertRow();
-                data.forEach(val => newRow.insertCell().innerText = val);
-                newRow.insertCell().innerHTML = `<button onclick="openRequirementModal(${tableBody.rows.length - 1})">Edit</button>
-                                                  <button onclick="this.parentElement.parentElement.remove()">Delete</button>`;
-            }
-
-            closeModal();
+        function editcloseModal() {
+            document.getElementById("editrequirementModal").style.display = "none";
+            alert = request.args.get('alert', None)
         }
-    </script>
-
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

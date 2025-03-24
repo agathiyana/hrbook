@@ -1,0 +1,219 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f8f9fa;
+}
+h2 {
+    text-align: center;
+    color: #333;
+}
+.btn-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+}
+button:hover {
+    background-color: #0056b3;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background-color: #007bff;
+    color: white;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.modal {
+display: none; /* Hidden by default */
+position: fixed; /* Stay in place */
+z-index: 1; /* Sit on top */
+left: 0;
+top: 0;
+width: 100%; /* Full width */
+height: 100%; /* Full height */
+overflow: auto; /* Enable scrolling */
+background-color: rgba(0,0,0,0.4); /* Black with opacity */
+}
+
+.modal-content {
+background-color: #fefefe;
+margin: 15% auto;
+padding: 20px;
+border: 1px solid #888;
+width: 80%; /* Modal width */
+max-height: 80%; /* Prevent modal from being too tall */
+overflow-y: auto; /* Enable scrolling inside the modal */
+}
+.modal-content label {
+    display: block;
+    margin-top: 10px;
+}
+.modal-content input, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #0a6dee;
+    border-radius: 4px;
+}
+.modal-content button {
+    margin-top: 15px;
+    width: 100%;
+}
+.close {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+alert {
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.alert-success {
+    background-color: #35e711;
+    color: white;
+    border: 1px solid #272b28;
+}
+
+.alert-error {
+    background-color: #e4969d;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f8f9fa;
+}
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}
+.header-container h2 {
+    margin: 0;
+    padding-left: 10px;
+}
+.header-container button {
+    background-color: white;
+    color: #007bff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+.header-container button:hover {
+    background-color: #e0e0e0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background-color: #007bff;
+    color: white;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.modal {
+    display: none;
+    position: flex;
+    z-index: 10;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 700px;
+    background-color: rgb(168, 209, 219);
+    box-shadow: 0px 0px 10px rgba(7, 45, 214, 0.897);
+    border-radius: 8px;
+    margin-bottom: 5%;
+    margin-top: 5%;
+}
+.modal-content {
+    padding: 20px;
+    margin-bottom: 5%;
+    margin-top: 5%;
+
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-header h3 {
+    margin: 0;
+}
+.close {
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.form-container {
+    display: flex;
+    gap: 15px;
+}
+.form-column {
+    flex: 1;
+}
+.form-column label {
+    display: block;
+    margin-top: 10px;
+}
+.form-column input, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.modal-content button {
+    margin-top: 15px;
+    width: 100%;
+}
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Registration Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Flask Modal Registration</h1>
+
+        <!-- Button to trigger the modal -->
+        <button id="openModalBtn">Register</button>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span id="closeModalBtn" class="close">&times;</span>
+                <h2>Register</h2>
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="button" id="submitBtn">Submit</button>
+                </form>
+                <div id="responseMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to handle modal and form submission -->
+    <script>
+        // Get modal elements
+        const modal = document.getElementById("myModal");
+        const openModalBtn = document.getElementById("openModalBtn");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        const submitBtn = document.getElementById("submitBtn");
+
+        // Open modal when button is clicked
+        openModalBtn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // Close modal when the user clicks on <span> (x)
+        closeModalBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Close modal if user clicks outside of the modal content
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Handle the form submission via AJAX when Submit button is clicked
+        submitBtn.onclick = function() {
+            // Collect form data
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const data = {
+                username: username,
+                email: email,
+                password: password
+            };
+
+            // Send the data via AJAX to Flask API
+            fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageElement = document.getElementById('responseMessage');
+                if (data.message) {
+                    messageElement.innerHTML = `<p style="color: green;">${data.message}</p>`;
+                    modal.style.display = "none";  // Close modal after successful registration
+                } else if (data.error) {
+                    messageElement.innerHTML = `<p style="color: red;">${data.error}</p>`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
