@@ -85,6 +85,7 @@ def managerequirement():
             return render_template('requirements.html',requirements=requirements)
 
 
+<<<<<<< HEAD
 
 
 # Route to delete a record
@@ -161,4 +162,8 @@ def getreq(record_id):
 
 if __name__ == '__main__':
     init_db()
+
+if __name__ == '__main__':
+    finalstatus = "completed"
+    #email_scheduler(finalstatus)
     app.run(debug=True)
