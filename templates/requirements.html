@@ -9,9 +9,15 @@
 <body>
 
     <div class="header-container">
-        <h2>Candidate Management</h2>
+        <h2>Requirement Management</h2>
 
         <button onclick="AddRequirementModal()">Add Requirement</button>
+
+        <form action="{{ url_for('graph') }}" method="GET">
+            <button type="submit">Report</button>
+        </form>
+
+
         <form action="{{ url_for('ctracker') }}" method="GET">
             <button type="submit">Candidate Management</button>
         </form>
@@ -138,15 +144,15 @@
                 <td>{{ requirement['display'] }}</td>
                 <td>{{ requirement['status'] }}</td>
                 <td>
-                    <!-- Delete Form -->
-                    <button type="submit" action="{{ url_for('edit', record_id=requirement.id) }}" method="POST" id="edit" data-bs-target="#editrequirementModal" onclick="editrequirementModal('{{requirement.id}}')">Edit</button>
-
+                    <!-- Action Form -->
+                       
+                    <button onclick="editrequirementModal()" data-bs-toggle="modal" data-bs-target="#editModal"
+                    data-id="{{ requirement.id }}">Edit</button>
+                
                     <form action="{{ url_for('delete', record_id=requirement.id) }}" method="POST" style="display: inline;">
                         <button type="submit" class="btn btn-danger btn-sm">
                             <i class="fas fa-trash-alt"></i> Delete
                         </button> 
-                        
-
                     </form>
                 </td>
             </tr>
@@ -158,11 +164,11 @@
         </tbody>
     </table>
     
-    <div id="editrequirementModal" class="modal">
+    <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="editcloseModal()">&times;</span>
             <h3 id="modalTitle">Edit Requirement</h3>
-                <form action="/edit" method="POST">
+                <form id="editmodal" action="/edit" method="POST">
 
                     <div class="form-group">
                         <label for="id">Requirement Id</label>
@@ -255,14 +261,17 @@
             document.getElementById("requirementModal").style.display = "block";
             
         }
-        function editrequirementModal(id) {
-            document.getElementById("editrequirementModal").style.display = "block";
+        function editrequirementModal() {
+           document.getElementById("editModal").style.display = "block";
+           // var button = $(event.relatedTarget);  // The button that triggered the modal
+            //var reqId = button.data('id')
         }
-        
-        $('#edit').on('click', function() {
-            var reqid = $('#reqid').text();
+
+        $('#editModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);  // The button that triggered the modal
+            var reqId = button.data('id');
             $.ajax({
-                url: '/getreq/'+ reqid,
+                url: '/getreq/'+ reqId,
                 type: 'GET',
                 success: function(response) {
                     // Populate the modal with user data
@@ -282,14 +291,16 @@
                 }
             });
         });
+        
 
         function closeModal() {
+           
             document.getElementById("requirementModal").style.display = "none";
             alert = request.args.get('alert', None)
         }
 
         function editcloseModal() {
-            document.getElementById("editrequirementModal").style.display = "none";
+            document.getElementById("editModal").style.display = "none";
             alert = request.args.get('alert', None)
         }
 </script>

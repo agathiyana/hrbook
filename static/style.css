@@ -216,4 +216,82 @@ tr:nth-child(even) {
     margin-top: 15px;
     width: 100%;
 }
+.image-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;  /* Space between images */
+}
 
+.image-box {
+    width: 150px;  /* Set the size of each image box */
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ccc;  /* Optional: Add border around each image */
+    padding: 10px;
+}
+
+.image-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;  /* Ensures the image scales without distortion */
+}
+
+.chart-container {
+    width: 80%;
+    height: 400px;
+    margin: 30px auto;
+}
+
+.image-widget {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 10px;
+    border: 2px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    width: 80%;
+    margin: 20px auto;
+    background-color: #f9f9f9;
+}
+
+/* Style for individual image container */
+.image-item {
+    width: 40%;
+    border: 5px solid #ddd;
+    border-radius: 8px;
+    padding: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Style for the images inside the widget */
+.image-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Style for the image caption */
+.image-caption {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.zoomed {
+    transform: scale(6); /* Zoom level */
+}
+
+#image-container {
+    text-align: center;
+}
+
+#image-container img {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.25s ease;
+    cursor: pointer;
+}

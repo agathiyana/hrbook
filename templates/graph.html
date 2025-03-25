@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Requirements Management</title>
+    <div class="header-container">
+        <h2>Requirement Report</h2>
+        <form action="{{ url_for('managerequirement') }}" method="GET">
+            <button type="submit">Manage Requirement</button>
+        </form>
+        <br>
+    </div>
+</head>
+<body>
+   
+        <div id="image-container">
+            <img id="plotImage" src="data:image/png;base64,{{ graph }}" alt="Base64 Image">
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS (needed for some Bootstrap components) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // jQuery to handle click event on the image
+        $(document).ready(function() {
+            $('#plotImage').on('click', function() {
+                // Toggle the zoom effect on click
+                $(this).toggleClass('zoomed');
+            });
+        });
+    </script>
+    
+    </body>
+    </html>

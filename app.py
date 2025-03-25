@@ -1,5 +1,8 @@
 import sqlite3
 from flask import  Flask, flash, jsonify, render_template, request, redirect, url_for
+import matplotlib.pyplot as plt
+import io
+import base64
 
 app = Flask(__name__)
 
@@ -38,6 +41,40 @@ def ctracker():
     req_list = ['QA-Automation-Selenium-API-Jan', 'QA-Automation-Selenium-ETL-March', 'QA-Automation-Selenium-API-Mar', 'QA-Automation-Selenium-API-Feb']  
     # return open('templates/ctracker.html').read()  # Serve the main page
     return render_template('ctracker.html', req_list=req_list)
+
+@app.route('/graph')
+def graph():
+     with get_db() as conn:
+            curs = conn.cursor()
+            curs.execute('SELECT * FROM requirement')
+            requirements = curs.fetchall()
+
+            labels = [row[2] for row in requirements]
+            counts = [row[8] for row in requirements]
+
+    # Create a figure and axis
+     fig, ax = plt.subplots()
+     fig, ax = plt.subplots()
+     ax.bar(labels, counts, color='skyblue')
+     ax.set_xlabel('clientname')
+     ax.set_ylabel('openposition')
+     ax.set_title('Requirement Distribution')
+    # Data for the bar chart
+
+    # Save the figure to a BytesIO object in PNG format
+     img = io.BytesIO()
+     fig.savefig(img, format='png')
+     img.seek(0)  # Rewind the file pointer to the beginning
+
+    # Encode the image as a base64 string to display in the browser
+     img_base64 = base64.b64encode(img.getvalue()).decode('utf-8')
+
+    # Return the image as a response
+     return render_template('graph.html', graph=img_base64)
+    #req_list = ['QA-Automation-Selenium-API-Jan', 'QA-Automation-Selenium-ETL-March', 'QA-Automation-Selenium-API-Mar', 'QA-Automation-Selenium-API-Feb']  
+    # return open('templates/ctracker.html').read()  # Serve the main page
+    #req_list=req_list
+
 
 @app.route('/reg')
 def test():
@@ -105,10 +142,11 @@ def delete(record_id):
 @app.route('/edit', methods=['POST'])
 def edit():
     global recorddata
+    global recordid
     if request.method == 'POST':
     # Retrieve form data
         
-        record_id = request.form['requirementid']
+        recordid = request.form['requirementid']
         requirementname = request.form['requirementname']
         clientname = request.form['clientname']
         clientmanager = request.form['clientmanager']
@@ -128,7 +166,7 @@ def edit():
             curs = conn.cursor()
             curs.execute("UPDATE requirement SET requirementname = ?, clientname = ?,clientmanager=?,departmentname=?,accountmanager=?,jobdescription=?,workexperience=?,openposition=?,startdate=?,enddate=?,display=?,status=? WHERE id = ?",
             (requirementname, clientname, clientmanager, departmentname, accountmanager, jobdescription,
-              workexperience, openposition, startdate, enddate, display, status,record_id))
+              workexperience, openposition, startdate, enddate, display, status,recordid))
             conn.commit()
             if curs.rowcount > 0:
                 alert_message = f"Record updated successfully! Requirement Name: {recorddata}"
