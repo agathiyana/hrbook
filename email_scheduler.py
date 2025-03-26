@@ -6,6 +6,7 @@ import time
 import ssl
 import threading
 
+
 # Email settings (replace with actual details)
 status = 'pending'
 finalstatus =''
@@ -13,19 +14,20 @@ finalstatus =''
 # Email settings
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465  # SSL port
-SENDER_EMAIL = ""
-SENDER_PASSWORD = ""
-RECIPIENT_EMAIL = ""
+SENDER_EMAIL = "venky84.selva@gmail.com"
+SENDER_PASSWORD = "qshb sgex koxw zucd"
+RECIPIENT_EMAIL = "venky84.selva@gmail.com"
 EMAIL_SUBJECT = "HRBook- Test mail"
-EMAIL_BODY = "The status of the task has changed."
+
 
 # Function to send email
-def send_email():
+def send_email(currentstatus,newstatus):
     try:
       msg = MIMEMultipart()
       msg['From'] = SENDER_EMAIL
       msg['To'] = RECIPIENT_EMAIL
       msg['Subject'] = EMAIL_SUBJECT
+      EMAIL_BODY = f"The status of the task has changed. Privious Status: {currentstatus} Current status: {newstatus} " 
 
         # Attach the email body
       msg.attach(MIMEText(EMAIL_BODY, 'plain'))
@@ -40,23 +42,13 @@ def send_email():
     except Exception as e:
         print(f"Error sending email: {e}")
 
-def email_scheduler(value):
-    global status
+def email_scheduler(currentstatus,newstatus):
   # Simulating a status change. This can be dynamic.
-    print('js execution started 1'+ status+ value);
+    print('js execution started 1'+ currentstatus+ newstatus);
     # When the status changes, trigger the email sending
-    if status != value:
-        print(f"Status changed from {status} to {value}. Sending email...")
-        send_email()
-        status = value
+    if currentstatus != newstatus:
+        print(f"Status changed from {currentstatus} to {newstatus}. Sending email...")
+        send_email(currentstatus,newstatus)
+        status = newstatus
     else:
         print("No status change.")
-
-# Scheduler to check the status periodically (every 5 seconds in this example)
-schedule.every(60).seconds.do(email_scheduler(finalstatus))
-
-# Keep the script running
-while True:
-    schedule.run_pending()
-    time.sleep(1)
-    

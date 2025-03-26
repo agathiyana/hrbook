@@ -3,7 +3,7 @@ from flask import  Flask, flash, jsonify, render_template, request, redirect, ur
 import matplotlib.pyplot as plt
 import io
 import base64
-
+from email_scheduler import email_scheduler
 app = Flask(__name__)
 
 DATABASE = 'requirements.db'
@@ -58,7 +58,7 @@ def graph():
      ax.bar(labels, counts, color='skyblue')
      ax.set_xlabel('clientname')
      ax.set_ylabel('openposition')
-     ax.set_title('Requirement Distribution')
+     ax.set_title('Client Opening Report')
     # Data for the bar chart
 
     # Save the figure to a BytesIO object in PNG format
@@ -82,7 +82,7 @@ def test():
 
 @app.route('/managerequirement',methods=['GET', 'POST'])
 def managerequirement():
-    global recorddata
+    
     if request.method == 'POST':
     # Retrieve form data
         requirementname = request.form['requirementname']
@@ -143,6 +143,7 @@ def delete(record_id):
 def edit():
     global recorddata
     global recordid
+    global newstatus
     if request.method == 'POST':
     # Retrieve form data
         
@@ -159,7 +160,8 @@ def edit():
         enddate = request.form['enddate']
         display = request.form['display']
         status = request.form['status']
-        app.logger.warning("A warning message."+requirementname)  
+        app.logger.warning("A warning message."+requirementname) 
+        newstatus =  request.form['status']
         recorddata = requirementname
     # Insert into database
         with get_db() as conn:
@@ -170,8 +172,11 @@ def edit():
             conn.commit()
             if curs.rowcount > 0:
                 alert_message = f"Record updated successfully! Requirement Name: {recorddata}"
+                email_scheduler(currentstatus,newstatus)
             else:
                 alert_message = 'Record not added. Requirement Name: {recorddata}'
+               
+
             return redirect(url_for('managerequirement',alert=alert_message))
     else:
         with get_db() as conn:
@@ -191,6 +196,8 @@ def getreq(record_id):
                 curs.execute("SELECT * from requirement WHERE id = ?", (record_id,))
                 requirements = curs.fetchone()
                 if requirements:
+                    global currentstatus 
+                    currentstatus = requirements['status']
                     return jsonify ({"id":requirements['id'],"requirementname":requirements['requirementname'],"clientname":requirements['clientname'],"clientmanager":requirements['clientmanager'],"departmentname":requirements['departmentname'],"accountmanager":requirements['accountmanager'],"jobdescription":requirements['jobdescription'],"workexperience":requirements['workexperience'],
                     "openposition":requirements['openposition'],"startdate":requirements['startdate'],"enddate":requirements['enddate'],"display":requirements['display'],"status":requirements['status']})
 
