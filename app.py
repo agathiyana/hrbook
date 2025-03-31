@@ -1,12 +1,15 @@
+import os
+import secrets
 import sqlite3
-from flask import  Flask, flash, jsonify, render_template, request, redirect, url_for
+from flask import  Flask, flash, jsonify, render_template, request, redirect, session, url_for
 import matplotlib.pyplot as plt
 import io
 import base64
 from email_scheduler import email_scheduler
 app = Flask(__name__)
-
-DATABASE = 'requirements.db'
+app.secret_key = os.urandom(24)
+global color
+DATABASE = 'requirementlist.db'
 
 def get_db():
     """Returns a connection to the SQLite database"""
@@ -18,20 +21,26 @@ def init_db():
     """Initialize the database with required table"""
     with get_db() as conn:
         conn.execute('''
-            CREATE TABLE IF NOT EXISTS requirement (
+            CREATE TABLE IF NOT EXISTS requirementdetail (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                requirementname TEXT NOT NULL,
-                clientname TEXT NOT NULL,
-                clientmanager TEXT NOT NULL,
-                departmentname TEXT NOT NULL,
-                accountmanager TEXT NOT NULL,
-                jobdescription TEXT NOT NULL,
-                workexperience TEXT NOT NULL,
-                openposition INTEGER NOT NULL,
-                startdate TEXT NOT NULL,
-                enddate TEXT NOT NULL,
-                display TEXT NOT NULL,
-                status TEXT NOT NULL
+                requirementname String NOT NULL,
+                clientname String NOT NULL,
+                clientmanager String NOT NULL,
+	            departmentname String NOT NULL,
+	            accountmanager String NOT NULL,
+	            jobdescription String NOT NULL,
+	            workexperience String NOT NULL,
+	            openposition String NOT NULL,
+	            timing String NULL,
+	            locationname String NULL,
+	            workmode String NOT NULL,
+	            recruiter String NULL,
+	            budget String NULL,
+	            comment String NULL,
+	            startdate String NOT NULL,
+	            enddate String  NULL,
+	            display String NOT NULL,
+	            status String NOT NULL
             )
         ''')
         conn.commit()
@@ -46,11 +55,11 @@ def ctracker():
 def graph():
      with get_db() as conn:
             curs = conn.cursor()
-            curs.execute('SELECT * FROM requirement')
-            requirements = curs.fetchall()
+            curs.execute('SELECT * FROM requirementdetail')
+            requirementdetail = curs.fetchall()
 
-            labels = [row[2] for row in requirements]
-            counts = [row[8] for row in requirements]
+            labels = [row[2] for row in requirementdetail]
+            counts = [row[8] for row in requirementdetail]
 
     # Create a figure and axis
      fig, ax = plt.subplots()
@@ -93,6 +102,12 @@ def managerequirement():
         jobdescription = request.form['jobdescription']
         workexperience = request.form['workexperience']
         openposition = request.form['openposition']
+        timing = request.form['timing']
+        locationname = request.form['locationname']
+        workmode = request.form['workmode']
+        recruiter = request.form['recruiter']
+        budget = request.form['budget']
+        comment = request.form['comment']
         startdate = request.form['startdate']
         enddate = request.form['enddate']
         display = request.form['display']
@@ -103,11 +118,11 @@ def managerequirement():
         with get_db() as conn:
             curs = conn.cursor()
             curs.execute('''
-            INSERT INTO requirement (requirementname, clientname, clientmanager, departmentname, accountmanager,
-                                    jobdescription, workexperience, openposition, startdate, enddate, display, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO requirementdetail (requirementname, clientname, clientmanager, departmentname, accountmanager,
+                                    jobdescription, workexperience, openposition,timing,locationname,workmode,recruiter,budget,comment, startdate, enddate, display, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)
         ''', (requirementname, clientname, clientmanager, departmentname, accountmanager, jobdescription,
-              workexperience, openposition, startdate, enddate, display, status))
+              workexperience, openposition,timing,locationname,workmode,recruiter,budget,comment, startdate, enddate, display, status))
             conn.commit()
             if curs.rowcount > 0:
                 alert_message = f"Record added successfully! Requirement Name: {recorddata}"
@@ -117,7 +132,7 @@ def managerequirement():
     else:
         with get_db() as conn:
             curs = conn.cursor()
-            curs.execute('SELECT * FROM requirement')
+            curs.execute('SELECT * FROM requirementdetail')
             requirements = curs.fetchall()
             return render_template('requirements.html',requirements=requirements)
 
@@ -127,10 +142,10 @@ def delete(record_id):
     global recorddata
     conn = get_db()
     cur = conn.cursor()
-    cur.execute("SELECT requirementname from requirement WHERE id = ?", (record_id,))
+    cur.execute("SELECT requirementname from requirementdetail WHERE id = ?", (record_id,))
     recorddata = cur.fetchone()
     # DELETE query to remove the record with the given ID
-    cur.execute("DELETE FROM requirement WHERE id = ?", (record_id,))
+    cur.execute("DELETE FROM requirementdetail WHERE id = ?", (record_id,))
     conn.commit()  # Commit the changes to the database
     if cur.rowcount > 0:
             alert_message = f"Record deleted successfully! Requirement Name: {recorddata['requirementname']}"
@@ -156,6 +171,12 @@ def edit():
         jobdescription = request.form['jobdescription']
         workexperience = request.form['workexperience']
         openposition = request.form['openposition']
+        timing = request.form['timing']
+        locationname = request.form['locationname']
+        workmode = request.form['workmode']
+        recruiter = request.form['recruiter']
+        budget = request.form['budget']
+        comment = request.form['comment']
         startdate = request.form['startdate']
         enddate = request.form['enddate']
         display = request.form['display']
@@ -166,9 +187,9 @@ def edit():
     # Insert into database
         with get_db() as conn:
             curs = conn.cursor()
-            curs.execute("UPDATE requirement SET requirementname = ?, clientname = ?,clientmanager=?,departmentname=?,accountmanager=?,jobdescription=?,workexperience=?,openposition=?,startdate=?,enddate=?,display=?,status=? WHERE id = ?",
+            curs.execute("UPDATE requirementdetail SET requirementname = ?, clientname = ?,clientmanager=?,departmentname=?,accountmanager=?,jobdescription=?,workexperience=?,openposition=?,timing=?,locationname=?,workmode=?,recruiter=?,budget=?,comment=?,startdate=?,enddate=?,display=?,status=? WHERE id = ?",
             (requirementname, clientname, clientmanager, departmentname, accountmanager, jobdescription,
-              workexperience, openposition, startdate, enddate, display, status,recordid))
+              workexperience, openposition,timing,locationname,workmode,recruiter,budget,comment, startdate, enddate, display, status,recordid))
             conn.commit()
             if curs.rowcount > 0:
                 alert_message = f"Record updated successfully! Requirement Name: {recorddata}"
@@ -181,7 +202,7 @@ def edit():
     else:
         with get_db() as conn:
             curs = conn.cursor()
-            curs.execute('SELECT * FROM requirement')
+            curs.execute('SELECT * FROM requirementdetail')
             requirements = curs.fetchall()
             return render_template('requirements.html',requirements=requirements)
 
@@ -193,13 +214,27 @@ def redirect_page():
 def getreq(record_id):
             with get_db() as conn:
                 curs = conn.cursor()
-                curs.execute("SELECT * from requirement WHERE id = ?", (record_id,))
+                curs.execute("SELECT * from requirementdetail WHERE id = ?", (record_id,))
                 requirements = curs.fetchone()
                 if requirements:
                     global currentstatus 
                     currentstatus = requirements['status']
                     return jsonify ({"id":requirements['id'],"requirementname":requirements['requirementname'],"clientname":requirements['clientname'],"clientmanager":requirements['clientmanager'],"departmentname":requirements['departmentname'],"accountmanager":requirements['accountmanager'],"jobdescription":requirements['jobdescription'],"workexperience":requirements['workexperience'],
-                    "openposition":requirements['openposition'],"startdate":requirements['startdate'],"enddate":requirements['enddate'],"display":requirements['display'],"status":requirements['status']})
+                    "openposition":requirements['openposition'],"timing":requirements['timing'],"locationname":requirements['locationname'],"workmode":requirements['workmode'],"recruiter":requirements['recruiter'],"budget":requirements['budget'],"comment":requirements['comment'],"startdate":requirements['startdate'],"enddate":requirements['enddate'],"display":requirements['display'],"status":requirements['status']})
+
+@app.route('/selectcolor', methods=['GET', 'POST'])
+def selectcolor():
+    selected_color = None
+    
+    if request.method == 'POST':
+        selected_color = request.form.get('color')  # Get the selected color value
+        session['background_color'] = selected_color
+        with get_db() as conn:
+            curs = conn.cursor()
+            curs.execute('SELECT * FROM requirementdetail')
+            requirements = curs.fetchall()
+            return render_template('requirements.html',requirements=requirements)
+
 
 if __name__ == '__main__':
     init_db()

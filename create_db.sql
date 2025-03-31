@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS requirement (
+CREATE TABLE IF NOT EXISTS requirementdetail (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     requirementname String NOT NULL,
     clientname String NOT NULL,
@@ -8,8 +8,14 @@ CREATE TABLE IF NOT EXISTS requirement (
 	jobdescription String NOT NULL,
 	workexperience String NOT NULL,
 	openposition String NOT NULL,
+	timing String NULL,
+	locationname Strring NULL,
+	workmode String NULL,
+	recruiter String NULL,
+	budget String NULL,
+	comment String NULL,
 	startdate String NOT NULL,
-	enddate String NOT NULL,
+	enddate String  NULL,
 	display String NOT NULL,
 	jobstatus String NOT NULL
 );

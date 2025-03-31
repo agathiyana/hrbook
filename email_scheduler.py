@@ -14,9 +14,9 @@ finalstatus =''
 # Email settings
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465  # SSL port
-SENDER_EMAIL = "venky84.selva@gmail.com"
-SENDER_PASSWORD = "qshb sgex koxw zucd"
-RECIPIENT_EMAIL = "venky84.selva@gmail.com"
+SENDER_EMAIL = ""
+SENDER_PASSWORD = ""
+RECIPIENT_EMAIL = ""
 EMAIL_SUBJECT = "HRBook- Test mail"
 
 

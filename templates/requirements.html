@@ -9,6 +9,14 @@
 <body>
 
     <div class="header-container">
+     <!--  
+        <form action="{{ url_for('selectcolor') }}" method="POST">
+            
+            <label for="color">Choose a color:</label>
+            <input type="color" id="color" name="color" value="{{ color }}"> 
+    
+            <button type="submit">Submit</button>
+        </form> -->
         <h2>Requirement Management</h2>
 
         <button onclick="AddRequirementModal()">Add Requirement</button>
@@ -69,6 +77,40 @@
                         <label for="openposition">Open Position</label>
                         <input type="number" id="openposition" name="openposition" required>
                     </div>
+
+                    <div class="form-group">
+                        <label for="timing">Timing</label>
+                        <input type="text" id="timing" name="timing" optional>
+                    </div>
+					
+					<div class="form-group">
+                        <label for="locationname">Location Name</label>
+                        <input type="text" id="locationname" name="locationname" optional>
+                    </div>
+					
+					<div class="form-group">
+                        <label for="workmode">WorkMode</label>
+                        <select id="workmode" name="workmode" required>
+                            <option value="WFO">WFO</option>
+                            <option value="Remote">Remote</option>
+							<option value="Hybrid">Hybrid</option>
+                        </select>
+                    </div>
+					
+					<div class="form-group">
+                        <label for="recruiter">Recruiter Name</label>
+                        <input type="text" id="recruiter" name="recruiter" optional>
+                    </div>
+					
+					<div class="form-group">
+                        <label for="budget">Budget</label>
+                        <input type="text" id="budget" name="budget" optional>
+                    </div>
+					
+					<div class="form-group">
+                        <label for="comment">Comment</label>
+                        <input type="text" id="comment" name="comment" optional>
+                    </div>
         
                     <div class="form-group">
                         <label for="startdate">Start Date</label>
@@ -77,7 +119,7 @@
         
                     <div class="form-group">
                         <label for="enddate">End Date</label>
-                        <input type="date" id="enddate" name="enddate" required>
+                        <input type="date" id="enddate" name="enddate" optional>
                     </div>
         
                     <div class="form-group">
@@ -91,8 +133,11 @@
                     <div class="form-group">
                         <label for="status">Status</label>
                         <select id="status" name="status" required>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
+                            <option value="Open">Open</option>
+                            <option value="Inprogress">Inprogress</option>
+							<option value="Filled">Filled</option>
+							<option value="onhold">onhold</option>
+							<option value="Lost">Lost</option>
                         </select>
                     </div>
         
@@ -108,18 +153,25 @@
             {{ request.args.get('alert')}}
         </div>
     {% endif %}
-    <table>
+    <div class="table-container">
+    <table >
         <thead>
             <tr>
-                <th>Requirement id</th>
-                <th>Requirement Name</th>
-                <th>Client Name</th>
+                <th class="sticky-column">Requirement id</th>
+                <th class="sticky-column">Requirement Name</th>
+                <th class="sticky-column">Client Name</th>
                 <th>Client Manager</th>
                 <th>Department Name</th>
                 <th>Account Manager</th>
                 <th>Job Description</th>
                 <th>Total Work Experience</th>
                 <th>Total Open Position</th>
+                <th>Timing</th>
+                <th>location Name</th>
+                <th>WorkMode</th>
+                <th>Recruiter</th>
+                <th>Budget</th>
+                <th>Comment</th>
 				<th>Start Date</th>
 				<th>End Date</th>
 				<th>Display?</th>
@@ -130,15 +182,21 @@
         <tbody>
             {% for requirement in requirements %}
             <tr>
-                <td id="reqid">{{ requirement['id'] }}</td>
-                <td>{{ requirement['requirementname'] }}</td>
-                <td>{{ requirement['clientname'] }}</td>
-                <td>{{ requirement['clientmanager'] }}</td>
-                <td>{{ requirement['departmentname'] }}</td>
-                <td>{{ requirement['accountmanager'] }}</td>
-                <td>{{ requirement['jobdescription'] }}</td>
-                <td>{{ requirement['workexperience'] }}</td>
+                <td class="sticky-column" id="reqid" ">{{ requirement['id'] }}</td>
+                <td class="sticky-column">{{ requirement['requirementname'] }}</td>
+                <td class="sticky-column">{{ requirement['clientname'] }}</td>
+                <td class="tooltip" >{{ requirement['clientmanager'] }}</td>
+                <td class="tooltip" >{{ requirement['departmentname'] }}</td>
+                <td class="tooltip">{{ requirement['accountmanager'] }}</td>
+                <td class="tooltip">{{ requirement['jobdescription'] }}</td>
+                <td class="tooltip">{{ requirement['workexperience'] }}</td>
                 <td>{{ requirement['openposition'] }}</td>
+                <td>{{ requirement['timing'] }}</td>
+                <td>{{ requirement['locationname'] }}</td>
+                <td>{{ requirement['workmode'] }}</td>
+                <td>{{ requirement['recruiter'] }}</td>
+                <td>{{ requirement['budget'] }}</td>
+                <td>{{ requirement['comment'] }}</td>
                 <td>{{ requirement['startdate'] }}</td>
                 <td>{{ requirement['enddate'] }}</td>
                 <td>{{ requirement['display'] }}</td>
@@ -163,6 +221,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
     
     <div id="editModal" class="modal">
         <div class="modal-content">
@@ -214,6 +273,41 @@
                         <label for="openposition">Open Position</label>
                         <input type="number" id="openposition_edit" name="openposition" required>
                     </div>
+
+                    <div class="form-group">
+                        <label for="timing">Timing</label>
+                        <input type="text" id="timing_edit" name="timing" optional>
+                    </div>
+					
+					<div class="form-group">
+                        <label for="locationname">Location Name</label>
+                        <input type="text" id="locationname_edit" name="locationname" optional>
+                    </div>
+					
+					<div class="form-group">
+                        <label for="workmode">WorkMode</label>
+                        <select id="workmode_edit" name="workmode" required>
+                            <option value="WFO">WFO</option>
+                            <option value="Remote">Remote</option>
+							<option value="Hybrid">Hybrid</option>
+                        </select>
+                    </div>
+					
+					<div class="form-group">
+                        <label for="recruiter">Recruiter Name</label>
+                        <input type="text" id="recruiter_edit" name="recruiter" optional>
+                    </div>
+					
+					<div class="form-group">
+                        <label for="budget">Budget</label>
+                        <input type="text" id="budget_edit" name="budget" optional>
+                    </div>
+					
+					<div class="form-group">
+                        <label for="comment">Comment</label>
+                        <input type="text" id="comment_edit" name="comment" optional>
+                    </div>
+        
         
                     <div class="form-group">
                         <label for="startdate">Start Date</label>
@@ -222,7 +316,7 @@
         
                     <div class="form-group">
                         <label for="enddate">End Date</label>
-                        <input type="date" id="enddate_edit" name="enddate" required>
+                        <input type="date" id="enddate_edit" name="enddate" optional>
                     </div>
         
                     <div class="form-group">
@@ -236,8 +330,11 @@
                     <div class="form-group">
                         <label for="status">Status</label>
                         <select id="status_edit" name="status" required>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
+                            <option value="Open">Open</option>
+                            <option value="Inprogress">Inprogress</option>
+							<option value="Filled">Filled</option>
+							<option value="onhold">onhold</option>
+							<option value="Lost">Lost</option>
                         </select>
                     </div>
         
@@ -284,6 +381,12 @@
                     $('#jobdescription_edit').val(response.jobdescription);
                     $('#workexperience_edit').val(response.workexperience);
                     $('#openposition_edit').val(response.openposition);
+                    $('#timing_edit').val(response.timing);
+                    $('#locationname_edit').val(response.locationname);
+                    $('#workmode_edit').val(response.workmode);
+                    $('#recruiter_edit').val(response.recruiter);
+                    $('#budget_edit').val(response.budget);
+                    $('#comment_edit').val(response.comment);
                     $('#startdate_edit').val(response.startdate);
                     $('#enddate_edit').val(response.enddate);
                     $('#display_edit').val(response.display);
@@ -303,6 +406,15 @@
             document.getElementById("editModal").style.display = "none";
             alert = request.args.get('alert', None)
         }
+
+        document.getElementById('color').addEventListener('input', function(event) {
+        var selectedColor = event.target.value;
+
+        document.body.style.backgroundColor = selectedColor;
+        $(".modal").css("background-color", selectedColor);
+    });
+
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
